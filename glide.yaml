@@ -1,0 +1,17 @@
+package: github.com/30x/khaos-monkey
+import:
+- package: gopkg.in/kyokomi/emoji.v1
+  version: ~1.4.0
+package: github.com/30x/khaos-monkey
+import:
+- package: golang.org/x/net
+  subpackages:
+  - lex
+- package: k8s.io/kubernetes
+  version: v1.4.5
+  subpackages:
+  - pkg/client/unversioned/remotecommand
+- package: gopkg.in/kyokomi/emoji.v1
+  version: ~1.4.0
+- package: k8s.io/client-go
+  version: v1.4.0

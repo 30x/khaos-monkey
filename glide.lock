@@ -1,0 +1,128 @@
+hash: d68cd6f60c9b569534d3065f8c8d7e9fe1026b03e3fd243de49c83c00e85342e
+updated: 2016-11-03T13:25:00.70034705-06:00
+imports:
+- name: github.com/blang/semver
+  version: 60ec3488bfea7cca02b021d106d9911120d25fe9
+- name: github.com/davecgh/go-spew
+  version: 346938d642f2ec3594ed81d874461961cd0faa76
+  subpackages:
+  - spew
+- name: github.com/docker/distribution
+  version: fbe6e8d212ed880cf7f7c9f876ba9b15c8221c5f
+  subpackages:
+  - digest
+  - reference
+- name: github.com/emicklei/go-restful
+  version: 3d66f886316ac990eb502aaa89ea38546420b8b7
+  subpackages:
+  - log
+  - swagger
+- name: github.com/ghodss/yaml
+  version: bea76d6a4713e18b7f5321a2b020738552def3ea
+- name: github.com/gogo/protobuf
+  version: a9cd0c35b97daf74d0ebf3514c5254814b2703b4
+  subpackages:
+  - proto
+  - sortkeys
+- name: github.com/golang/glog
+  version: 23def4e6c14b4da8ac2ed8007337bc5eb5007998
+- name: github.com/google/gofuzz
+  version: fd52762d25a41827db7ef64c43756fd4b9f7e382
+- name: github.com/juju/ratelimit
+  version: 77ed1c8a01217656d2080ad51981f6e99adaa177
+- name: github.com/pborman/uuid
+  version: 3d4f2ba23642d3cfd06bd4b54cf03d99d95c0f1b
+- name: github.com/spf13/pflag
+  version: 5ccb023bc27df288a957c5e994cd44fd19619465
+- name: github.com/ugorji/go
+  version: faddd6128c66c4708f45fdc007f575f75e592a3c
+  subpackages:
+  - codec
+- name: golang.org/x/net
+  version: 569280fa63be4e201b975e5411e30a92178f0118
+  subpackages:
+  - context
+  - http2
+  - http2/hpack
+  - idna
+  - lex
+  - lex/httplex
+- name: gopkg.in/inf.v0
+  version: 3887ee99ecf07df5b447e9b00d9c0b2adaa9f3e4
+- name: gopkg.in/kyokomi/emoji.v1
+  version: 17c5e7085c9d59630aa578df67f4469481fbe7a9
+- name: gopkg.in/yaml.v2
+  version: a5b47d31c556af34a302ce5d659e6fea44d90de0
+- name: k8s.io/client-go
+  version: 3a5b96cfd3d3ff1d53d979b4297c4f3b869aab09
+  subpackages:
+  - 1.4/pkg/api
+  - 1.4/pkg/api/endpoints
+  - 1.4/pkg/api/errors
+  - 1.4/pkg/api/meta
+  - 1.4/pkg/api/meta/metatypes
+  - 1.4/pkg/api/pod
+  - 1.4/pkg/api/resource
+  - 1.4/pkg/api/service
+  - 1.4/pkg/api/unversioned
+  - 1.4/pkg/api/unversioned/validation
+  - 1.4/pkg/api/util
+  - 1.4/pkg/api/v1
+  - 1.4/pkg/api/validation
+  - 1.4/pkg/apimachinery
+  - 1.4/pkg/apimachinery/registered
+  - 1.4/pkg/apis/autoscaling
+  - 1.4/pkg/apis/batch
+  - 1.4/pkg/apis/extensions
+  - 1.4/pkg/auth/user
+  - 1.4/pkg/capabilities
+  - 1.4/pkg/conversion
+  - 1.4/pkg/conversion/queryparams
+  - 1.4/pkg/fields
+  - 1.4/pkg/labels
+  - 1.4/pkg/runtime
+  - 1.4/pkg/runtime/serializer
+  - 1.4/pkg/runtime/serializer/json
+  - 1.4/pkg/runtime/serializer/protobuf
+  - 1.4/pkg/runtime/serializer/recognizer
+  - 1.4/pkg/runtime/serializer/streaming
+  - 1.4/pkg/runtime/serializer/versioning
+  - 1.4/pkg/security/apparmor
+  - 1.4/pkg/selection
+  - 1.4/pkg/third_party/forked/golang/reflect
+  - 1.4/pkg/types
+  - 1.4/pkg/util
+  - 1.4/pkg/util/clock
+  - 1.4/pkg/util/config
+  - 1.4/pkg/util/crypto
+  - 1.4/pkg/util/errors
+  - 1.4/pkg/util/flowcontrol
+  - 1.4/pkg/util/framer
+  - 1.4/pkg/util/hash
+  - 1.4/pkg/util/integer
+  - 1.4/pkg/util/intstr
+  - 1.4/pkg/util/json
+  - 1.4/pkg/util/labels
+  - 1.4/pkg/util/net
+  - 1.4/pkg/util/net/sets
+  - 1.4/pkg/util/parsers
+  - 1.4/pkg/util/rand
+  - 1.4/pkg/util/runtime
+  - 1.4/pkg/util/sets
+  - 1.4/pkg/util/uuid
+  - 1.4/pkg/util/validation
+  - 1.4/pkg/util/validation/field
+  - 1.4/pkg/util/wait
+  - 1.4/pkg/util/yaml
+  - 1.4/pkg/version
+  - 1.4/pkg/watch
+  - 1.4/pkg/watch/versioned
+  - 1.4/rest
+  - 1.4/tools/clientcmd/api
+  - 1.4/tools/metrics
+  - 1.4/transport
+- name: k8s.io/kubernetes
+  version: 5a0a696437ad35c133c0c8493f7e9d22b0f9b81b
+  subpackages:
+  - pkg/client/unversioned/remotecommand
+testImports: []
