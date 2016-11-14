@@ -4,17 +4,21 @@ import (
   "fmt"
   "os"
   "time"
+  "strings"
 )
 
 const (
   // DefaultKhaosInterval is the default time in seconds between khaos events
   DefaultKhaosInterval = 30
+  // DefaultKhaoticEvents default set of khaotic events, this is all of them
+  DefaultKhaoticEvents = "kill-pods,kill-services,drain-node,target-daemonsets"
 )
 
 type Config struct {
   Name string
   Namespace string
   KhaosInterval time.Duration
+  KhaoticEvents []string
 }
 
 func NewConfig() (conf *Config, err error) {
@@ -45,6 +49,13 @@ func NewConfig() (conf *Config, err error) {
     conf.KhaosInterval, err = time.ParseDuration(intervalStr)
     if err != nil { return nil, err }
   }
+
+  var events string
+  if events = os.Getenv("KHAOTIC_EVENTS"); events == "" || events == "all" {
+    events = DefaultKhaoticEvents
+  }
+
+  conf.KhaoticEvents = strings.Split(events, ",")
 
   return
 }
