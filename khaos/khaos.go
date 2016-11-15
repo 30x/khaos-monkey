@@ -13,7 +13,6 @@ import (
 
 const (
   killPodsEventStr = "kill-pods"
-  killServicesEventStr = "kill-services"
   drainNodeEventStr = "drain-node"
   targetDaemonsetEventStr = "target-daemonset"
 )
@@ -26,9 +25,6 @@ func RunRandomKhaoticEvent(clientset *kubernetes.Clientset, khaosConfig *utils.C
   switch khaosConfig.KhaoticEvents[eventNdx] {
   case killPodsEventStr:
     return KillRandomPod(clientset, khaosConfig)
-  case killServicesEventStr:
-    fmt.Println("Going full orangutan on a service!")
-    break
   case drainNodeEventStr:
     fmt.Println("Going ape-shit on an entire node!")
     break

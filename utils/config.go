@@ -11,7 +11,7 @@ const (
   // DefaultKhaosInterval is the default time in seconds between khaos events
   DefaultKhaosInterval = 30
   // DefaultKhaoticEvents default set of khaotic events, this is all of them
-  DefaultKhaoticEvents = "kill-pods,kill-services,drain-node,target-daemonsets"
+  DefaultKhaoticEvents = "kill-pods,drain-node,target-daemonsets"
 )
 
 type Config struct {
