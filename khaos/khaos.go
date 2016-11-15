@@ -26,8 +26,7 @@ func RunRandomKhaoticEvent(clientset *kubernetes.Clientset, khaosConfig *utils.C
   case killPodsEventStr:
     return KillRandomPod(clientset, khaosConfig)
   case drainNodeEventStr:
-    fmt.Println("Going ape-shit on an entire node!")
-    break
+    return DrainNode(clientset, khaosConfig)
   case targetDaemonsetEventStr:
     fmt.Println("Targeting a daemonset with a banana")
     break
@@ -54,6 +53,36 @@ func KillRandomPod(clientset *kubernetes.Clientset, khaosConfig *utils.Config) (
     if err != nil { return err }
 
     fmt.Printf("Killed Pod: %s\n", deletingPod)
+  }
+
+  return
+}
+
+// DrainNode targets a random node and drains it of all pods
+func DrainNode(clientset *kubernetes.Clientset, khaosConfig *utils.Config) (err error) {
+  rand.Seed(time.Now().UTC().UnixNano())
+
+  podsInter := clientset.Core().Pods(api.NamespaceAll)
+  nodes, err := clientset.Core().Nodes().List(api.ListOptions{})
+  if err != nil { return err }
+
+  numNodes := len(nodes.Items)
+  drainingNode := nodes.Items[rand.Intn(numNodes)]
+  graceTime := int64(0)
+
+  pods, err := podsInter.List(api.ListOptions{})
+  fmt.Printf("Draining Node: %s\n", drainingNode.Name)
+
+  for _, pod := range pods.Items {
+    if pod.Spec.NodeName == drainingNode.Name && pod.Name != khaosConfig.Name {
+      err = podsInter.Delete(pod.Name, &api.DeleteOptions{
+        GracePeriodSeconds: &graceTime,
+      })
+
+      if err != nil { return err }
+
+      fmt.Printf("Drained Pod: %s\n", pod.Name)
+    }
   }
 
   return
