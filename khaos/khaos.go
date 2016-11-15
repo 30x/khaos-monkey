@@ -6,6 +6,7 @@ import (
   "time"
 
   "github.com/30x/khaos-monkey/utils"
+  emoji "gopkg.in/kyokomi/emoji.v1"
 
   "k8s.io/client-go/1.4/kubernetes"
   "k8s.io/client-go/1.4/pkg/api"
@@ -14,7 +15,6 @@ import (
 const (
   killPodsEventStr = "kill-pods"
   drainNodeEventStr = "drain-node"
-  targetDaemonsetEventStr = "target-daemonset"
 )
 
 // RunRandomKhaoticEvent randomly picks from the acceptable chaotic events and executes it
@@ -22,14 +22,12 @@ func RunRandomKhaoticEvent(clientset *kubernetes.Clientset, khaosConfig *utils.C
   rand.Seed(time.Now().UTC().UnixNano())
   eventNdx := rand.Intn(len(khaosConfig.KhaoticEvents))
 
+  emoji.Printf(":fire: %s :fire:\n", khaosConfig.KhaoticEvents[eventNdx])
   switch khaosConfig.KhaoticEvents[eventNdx] {
   case killPodsEventStr:
     return KillRandomPod(clientset, khaosConfig)
   case drainNodeEventStr:
     return DrainNode(clientset, khaosConfig)
-  case targetDaemonsetEventStr:
-    fmt.Println("Targeting a daemonset with a banana")
-    break
   }
 
   return
@@ -43,17 +41,27 @@ func KillRandomPod(clientset *kubernetes.Clientset, khaosConfig *utils.Config) (
   if err != nil { return err }
 
   numPods := len(pods.Items)
-  deletingPod := pods.Items[rand.Intn(numPods)].Name
-  tempInt := int64(0)
-  if deletingPod != khaosConfig.Name {
-    err = clientset.Core().Pods(khaosConfig.Namespace).Delete(deletingPod, &api.DeleteOptions{
-      GracePeriodSeconds: &tempInt,
-    })
 
-    if err != nil { return err }
-
-    fmt.Printf("Killed Pod: %s\n", deletingPod)
+  if numPods == 1 {
+    fmt.Println("this monkey is the only pod! skipping this event...")
+    return
   }
+
+  // select pods until it selects one other than itself
+  deletingPod := pods.Items[rand.Intn(numPods)].Name
+  for deletingPod == khaosConfig.Name {
+    deletingPod = pods.Items[rand.Intn(numPods)].Name
+  }
+
+  // delete the selected pod
+  gracePeriod := int64(0)
+  err = clientset.Core().Pods(khaosConfig.Namespace).Delete(deletingPod, &api.DeleteOptions{
+    GracePeriodSeconds: &gracePeriod,
+  })
+
+  if err != nil { return err }
+
+  fmt.Printf("Killed Pod: %s\n", deletingPod)
 
   return
 }

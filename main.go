@@ -24,14 +24,21 @@ func main() {
 	clientset, err := kubernetes.NewForConfig(config)
 	if err != nil { panic(err.Error()) }
 
+	// set up timer
+	timer := time.NewTimer(khaosConfig.KhaosDuration)
+
 	// event loop
 	for {
-		// put the monkey to sleep first
-		time.Sleep(khaosConfig.KhaosInterval * time.Second)
+		select {
+		case <-time.After(khaosConfig.KhaosInterval):
+			// wake up and wreak havoc
+			err = khaos.RunRandomKhaoticEvent(clientset, khaosConfig)
+			if err != nil { panic(err.Error()) }
 
-		// wake up and wreak havoc
-		err = khaos.RunRandomKhaoticEvent(clientset, khaosConfig)
-		if err != nil { panic(err.Error()) }
+		case <-timer.C:
+			emoji.Println(":wave:")
+			return // stop the khaos
+		}
 	}
 
 }
