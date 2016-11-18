@@ -1,55 +1,44 @@
 package main
 
 import (
-	"fmt"
-	"math/rand"
 	"time"
 
 	"github.com/30x/khaos-monkey/utils"
+	"github.com/30x/khaos-monkey/khaos"
 
 	emoji "gopkg.in/kyokomi/emoji.v1"
 	"k8s.io/client-go/1.4/kubernetes"
-	"k8s.io/client-go/1.4/pkg/api"
 	"k8s.io/client-go/1.4/rest"
 )
 
 func main() {
-	rand.Seed(time.Now().UTC().UnixNano())
-
 	khaosConfig, err := utils.NewConfig()
-	if err != nil {
-		panic(err.Error())
-	}
+	if err != nil { panic(err.Error()) }
 
 	emoji.Println(":see_no_evil: :hear_no_evil: :speak_no_evil:")
 
 	config, err := rest.InClusterConfig()
-	if err != nil {
-		panic(err.Error())
-	}
+	if err != nil { panic(err.Error()) }
 
 	// creates the clientset
 	clientset, err := kubernetes.NewForConfig(config)
-	if err != nil {
-		panic(err.Error())
-	}
-	for {
-		pods, err := clientset.Core().Pods(khaosConfig.Namespace).List(api.ListOptions{})
-		if err != nil {
-			panic(err.Error())
-		}
-		fmt.Printf("There are %d pods in the %s namespace\n", len(pods.Items), khaosConfig.Namespace)
-		numPods := len(pods.Items)
-		deletingPod := pods.Items[rand.Intn(numPods)].Name
-		tempInt := int64(0)
-		if deletingPod != khaosConfig.Name {
-			clientset.Core().Pods(khaosConfig.Namespace).Delete(deletingPod, &api.DeleteOptions{
-				GracePeriodSeconds: &tempInt,
-			})
-			fmt.Printf("Killed Pod: %s\n", deletingPod)
-		}
+	if err != nil { panic(err.Error()) }
 
-		time.Sleep(khaosConfig.KhaosInterval * time.Second)
+	// set up timer
+	timer := time.NewTimer(khaosConfig.KhaosDuration)
+
+	// event loop
+	for {
+		select {
+		case <-time.After(khaosConfig.KhaosInterval):
+			// wake up and wreak havoc
+			err = khaos.RunRandomKhaoticEvent(clientset, khaosConfig)
+			if err != nil { panic(err.Error()) }
+
+		case <-timer.C:
+			emoji.Println(":wave:")
+			return // stop the khaos
+		}
 	}
 
 }
