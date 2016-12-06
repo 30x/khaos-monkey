@@ -76,14 +76,25 @@ func DrainNode(clientset *kubernetes.Clientset, khaosConfig *utils.Config) (err 
 
   numNodes := len(nodes.Items)
   drainingNode := nodes.Items[rand.Intn(numNodes)]
+  if drainingNode.Spec.Unschedulable { // for now, we just skip if selected node is already cordoned
+    fmt.Printf("%s is already cordoned, skipping this event\n", drainingNode.Name)
+    return
+  }
+
   graceTime := int64(0)
 
   pods, err := podsInter.List(api.ListOptions{})
   fmt.Printf("Draining Node: %s\n", drainingNode.Name)
 
+  // make node unschedulable
+  drainingNode.Spec.Unschedulable = true;
+  _, err = clientset.Core().Nodes().Update(&drainingNode)
+  if err != nil { return err }
+
+  // kill pods on target node
   for _, pod := range pods.Items {
     if pod.Spec.NodeName == drainingNode.Name && pod.Name != khaosConfig.Name {
-      err = podsInter.Delete(pod.Name, &api.DeleteOptions{
+      err = clientset.Core().Pods(pod.ObjectMeta.Namespace).Delete(pod.Name, &api.DeleteOptions{
         GracePeriodSeconds: &graceTime,
       })
 
